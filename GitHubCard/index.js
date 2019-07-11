@@ -1,8 +1,9 @@
 /* Step 1: using axios, send a GET request to the following URL 
-           (replacing the palceholder with your Github name):
+           (replacing the placeholder with your Github name):
            https://api.github.com/users/<your name>
 */
-
+const promise = axios.get(`https://api.github.com/users/fskeen`)
+console.log(promise)
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -43,8 +44,48 @@ const followersArray = [];
     <p>Bio: {users bio}</p>
   </div>
 </div>
-
 */
+
+function createGithubCard (obj) {}
+
+// creating the elements of the page
+function createElement(name, className = null, content = '', setAttribute = null, attributeValue  = null) {
+  if(!name) return;
+  let element = document.createElement(name);
+  if(className) element.classList.add(className);
+  element.textContent = content;
+  if(setAttribute) element.setAttribute(`${setAttribute}`, `${attributeValue}`);
+  return element;
+}
+
+let cardContainer = createElement("div", "card", undefined);
+let cardImg = createElement("img", undefined, undefined, "src", "https://avatars1.githubusercontent.com/u/50350459?v=4");
+let cardInfo = createElement("div", "card-info", undefined);
+let cardName = createElement("h3", "name", "Bob");
+let cardUsername = createElement("h3", "username", "username here");
+let cardLocation = createElement("p", undefined, "location here")
+let cardProfile = createElement("p", undefined, "Profile: ")
+let cardProfileLink = createElement("a", undefined, "Find this person on Github here.", "src", "https://api.github.com/users/fskeen")
+let cardFollowers = createElement("p", undefined, "Who this person follows")
+let cardFollowing = createElement("p", undefined, "Who follows this person")
+let cardBio = createElement("p", undefined, "User Bio here")
+
+// sewing them together into a layout
+
+HTMLElement.prototype.appendChildren = function () {
+  for (let i = 0; i < arguments.length ; i++) {
+    this.appendChild(arguments[i])
+  }
+};
+
+cardContainer.appendChildren(cardImg, cardInfo);
+cardInfo.appendChildren(cardName, cardUsername, cardLocation, cardProfile, cardFollowers, cardFollowing, cardBio);
+cardProfile.appendChildren(cardProfileLink);
+
+console.log(cardContainer)
+
+
+
 
 /* List of LS Instructors Github username's: 
   tetondan
