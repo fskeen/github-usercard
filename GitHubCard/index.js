@@ -34,41 +34,71 @@ userData
 
 let followersArray = [];
 const followers = axios.get("https://api.github.com/users/fskeen/followers")
+let followLogins = []
 
 followers
-  .then(a => {
-    // console.log("Initial return from API call: ", a);
+  .then( a => {
+    // console.log(obj.data)
 
-    // iterate through the array of followers listed in the data section of the JSON
-    a.data.map(follower => {
-      // console.log("follower data", follower)
-
-      // capture each individual follower data in an object so that it matches the format expected by the constructor function (object.data.name, etc.)
-      let followObj = {data: follower}
-      // console.log("followObj var in fx", followObj)
-
-      // push the object to the array
-      followersArray.push(followObj)
-      // console.log("objs pushed to array", followersArray)
-      return followersArray
-    });
-
-    // console.log("followersArray after fx", followersArray)
-
-    // run the constructor function for each object in the array & store value
-    followersArray.map(arr => {
-      document.querySelector(".cards").appendChild(createGithubCard(arr))
+    followersArray = a.data.map(arr => {
+      // console.log("login", arr.login)
+      return arr.login
     })
 
-    // console.log("followersData", followersData)
-    // append those values to the page
+    followersArray.forEach(login => {
+      axios.get(`https://api.github.com/users/${login}`)
+        .then(follower => {
+          console.log(follower)
+          let followerDiv = createGithubCard(follower)
+          document.querySelector(".cards").appendChild(followerDiv)
+        })
+        .catch(error => {
+          console.log(`This ain't it, friend. Check out this error: ${error}`)
+        })
+    })
+
+    console.log(followersArray);
+    return followersArray;
+})
+  .catch(err => {
+    return console.log(`Hmm, try again. Check out this error: ${err}.`)
+})
+// console.log(followers)
+
+// followers
+//   .then(a => {
+//     // console.log("Initial return from API call: ", a);
+
+//     // iterate through the array of followers listed in the data section of the JSON
+//     a.data.map(follower => {
+//       // console.log("follower data", follower)
+
+//       // capture each individual follower data in an object so that it matches the format expected by the constructor function (object.data.name, etc.)
+//       let followObj = {data: follower}
+//       // console.log("followObj var in fx", followObj)
+
+//       // push the object to the array
+//       followersArray.push(followObj)
+//       // console.log("objs pushed to array", followersArray)
+//       return followersArray
+//     });
+
+//     // console.log("followersArray after fx", followersArray)
+
+//     // run the constructor function for each object in the array & store value
+//     followersArray.map(arr => {
+//       document.querySelector(".cards").appendChild(createGithubCard(arr))
+//     })
+
+//     // console.log("followersData", followersData)
+//     // append those values to the page
     
 
-  })
-  .catch(error => {
-    console.log(`Hmmm, wrong. Check this out: ${error}`)
-  })
-  console.log("followersArray variable: ", followersArray)
+//   })
+//   .catch(error => {
+//     console.log(`Hmmm, wrong. Check this out: ${error}`)
+//   })
+//   console.log("followersArray variable: ", followersArray)
 
 
 
